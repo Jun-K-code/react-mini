@@ -1,3 +1,18 @@
+import createFiber from '../reconciler/ReactFiber';
+
+/**
+ * 更新容器的方法
+ * @param {*} element 要挂载的 vnode 树
+ * @param {*} container 容器的 DOM 节点
+ */
+function updateContainer(element, container) {
+    createFiber(element, {
+        // 该对象就是我的父 fiber 对象，里面会放置一些核心的属性
+        type: container.nodeName.toLowerCase(),
+        stateNode: container,
+    });
+}
+
 class ReactDOMRoot {
     constructor(container) {
         // 将拿到的根 DOM 节点，在内部保存一份
@@ -11,7 +26,8 @@ class ReactDOMRoot {
      * 2、新的虚拟DOM(链表结构)，我们称之为 Fiber
      */
     render(children) {
-        console.log(children);
+        // console.log(children);
+        updateContainer(children, this._internalRoot);
     }
 }
 const ReactDom = {
