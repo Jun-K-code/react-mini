@@ -6,8 +6,9 @@ import {
     HostText,
     Fragment,
 } from './ReactWorkTags';
+
 /**
- *
+ * 创建Fiber
  * @param {*} vnode 当前的 vnode 节点
  * @param {*} returnFiber 父 Fiber 节点
  */
@@ -28,11 +29,11 @@ function createFiber(vnode, returnFiber) {
         sibling: null,
         // 父 fiber
         return: returnFiber,
-        // 该 fiber 对象要做的具体操作
+        // 该 fiber 对象要做的具体操作（架构篇-位运算）
         flags: Placement,
         // 记录当前节点在当前层级下的位置
         index: null,
-        // 存储旧的 fiber 对象（alternate在双缓冲）
+        // 存储旧的 fiber 对象（alternate在架构篇-双缓冲）
         alternate: null,
     };
 
