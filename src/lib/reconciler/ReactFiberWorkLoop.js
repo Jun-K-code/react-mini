@@ -1,6 +1,7 @@
 /**
  * @description 该文件负责整个React的一个执行流程
  */
+import beginWork from "./ReactFiberBeginWork";
 
 // wip 的英语全称为 work in progress，表示正在进行的工作
 // 我们使用这个变量来保存当前正在进行的工作 fiber 对象

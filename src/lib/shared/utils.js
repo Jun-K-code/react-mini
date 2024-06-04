@@ -39,3 +39,13 @@ export function isFn(fn) {
 export function isUndefined(s) {
     return s === undefined;
 }
+
+/**
+ * 该方法主要负责更新 DOM 节点上的属性
+ * @param {*} node 
+ * @param {*} prevVal 
+ * @param {*} nextVal 
+ */
+export function updateNode(node, prevVal, nextVal) {
+
+}
