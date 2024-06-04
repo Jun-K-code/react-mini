@@ -42,7 +42,7 @@ export function isUndefined(s) {
 
 /**
  * 该方法主要负责更新 DOM 节点上的属性
- * @param {*} node 
+ * @param {*} node 真实的 DOM 节点 
  * @param {*} prevVal 
  * @param {*} nextVal 
  */
