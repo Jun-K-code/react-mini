@@ -9,15 +9,15 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 // root.render(<App />);
 
-// root.render(
-//     <div>
-//         <ul>
-//             <li>苹果</li>
-//             <li>香蕉</li>
-//             <li>西瓜</li>
-//         </ul>
-//         111
-//     </div>
-// );
+root.render(
+    <div>
+        <ul>
+            <li>苹果</li>
+            <li>香蕉</li>
+            <li>西瓜</li>
+        </ul>
+        111
+    </div>
+);
 
-root.render(1111);
+// root.render(1111);

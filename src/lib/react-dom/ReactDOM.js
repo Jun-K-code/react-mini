@@ -1,4 +1,5 @@
 import createFiber from '../reconciler/ReactFiber';
+import scheduleUpdateOnFiber from '../reconciler/ReactFiberWorkLoop';
 
 /**
  * 更新容器的方法
@@ -6,38 +7,42 @@ import createFiber from '../reconciler/ReactFiber';
  * @param {*} container 容器的 DOM 节点
  */
 function updateContainer(element, container) {
-    createFiber(element, {
-        // 该对象就是我的父 fiber 对象，里面会放置一些核心的属性
-        type: container.nodeName.toLowerCase(),
-        stateNode: container,
-    });
+  const fiber = createFiber(element, {
+    // 该对象就是我的父 fiber 对象，里面会放置一些核心的属性
+    type: container.nodeName.toLowerCase(),
+    stateNode: container,
+  });
+  console.log('测试fiber', fiber);
+  // 到目前为止，我们就创建了第一个fiber对象。
+  // 但是目前仅仅只有最外层的父元素创建了对应的 fiber 对象
+  scheduleUpdateOnFiber(fiber);
 }
 
 class ReactDOMRoot {
-    constructor(container) {
-        // 将拿到的根 DOM 节点，在内部保存一份
-        this._internalRoot = container;
-    }
+  constructor(container) {
+    // 将拿到的根 DOM 节点，在内部保存一份
+    this._internalRoot = container;
+  }
 
-    /**
-     * @param {*} children 要挂载到根节点的 vnode 树
-     * 这里做一个讲课的约定：
-     * 1、以前的虚拟DOM(栈结构)，我们称之为 vnode
-     * 2、新的虚拟DOM(链表结构)，我们称之为 Fiber
-     */
-    render(children) {
-        // console.log(children);
-        updateContainer(children, this._internalRoot);
-    }
+  /**
+   * @param {*} children 要挂载到根节点的 vnode 树
+   * 这里做一个讲课的约定：
+   * 1、以前的虚拟DOM(栈结构)，我们称之为 vnode
+   * 2、新的虚拟DOM(链表结构)，我们称之为 Fiber
+   */
+  render(children) {
+    console.log('测试vnode', children);
+    updateContainer(children, this._internalRoot);
+  }
 }
 const ReactDom = {
-    /**
-     * @param {*} container 要挂载的根 DOM 节点
-     * @return 返回值是一个对象，该对象会有一个 render 方法
-     */
-    createRoot(container) {
-        return new ReactDOMRoot(container);
-    },
+  /**
+   * @param {*} container 要挂载的根 DOM 节点
+   * @return 返回值是一个对象，该对象会有一个 render 方法
+   */
+  createRoot(container) {
+    return new ReactDOMRoot(container);
+  },
 };
 
 export default ReactDom;
