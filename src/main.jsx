@@ -7,17 +7,19 @@ import ReactDOM from './lib/react-dom/ReactDOM';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
+const test = () => {};
+
 // root.render(<App />);
 
 root.render(
-    <div>
-        <ul>
-            <li>苹果</li>
-            <li>香蕉</li>
-            <li>西瓜</li>
-        </ul>
-        111
-    </div>
+  <div id="oDiv" className="test" onClick={test}>
+    <ul>
+      <li>苹果</li>
+      <li>香蕉</li>
+      <li>西瓜</li>
+    </ul>
+    111
+  </div>
 );
 
 // root.render(1111);
