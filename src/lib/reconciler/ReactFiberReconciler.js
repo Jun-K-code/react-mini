@@ -1,4 +1,5 @@
 import { updateNode } from '../shared/utils';
+import { reconcileChildren } from './ReactChildFiber';
 
 /**
  * @param {*} wip 需要处理的 fiber 对象节点
@@ -13,7 +14,11 @@ export const updateHostComponent = (wip) => {
     // console.log('测试更新属性前', wip.stateNode);
     // 接下来，我们需要更新节点上的属性
     updateNode(wip.stateNode, {}, wip.props);
-    console.log('测试更新属性后', wip.stateNode);
+    // console.log('测试更新属性后', wip.stateNode);
+
+    // 到目前位置，说明当前的 fiber 节点所对应的 stateNode 已经有值了，也就是说有对应的 DOM 了
+    // 因此，接下来的下一步，我们就应该处理子节点了
+    reconcileChildren(wip, wip.props.children);
   }
 };
 
