@@ -19,6 +19,9 @@ export const updateHostComponent = (wip) => {
     // 到目前位置，说明当前的 fiber 节点所对应的 stateNode 已经有值了，也就是说有对应的 DOM 了
     // 因此，接下来的下一步，我们就应该处理子节点了
     reconcileChildren(wip, wip.props.children);
+
+    // 上一步执行完毕后，说明已经处理完了所有的子节点 vnode，fiber 的链表也形成了
+    console.log('测试wip', wip);
   }
 };
 

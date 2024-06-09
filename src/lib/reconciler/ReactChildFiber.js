@@ -1,4 +1,5 @@
-import { isStr } from '../shared/utils';
+import { isStr, isArray } from '../shared/utils';
+import createFiber from '../reconciler/ReactFiber';
 
 /**
  * 该方法是用来协调子节点的，这里就会涉及到有名的 diff 算法
@@ -25,4 +26,69 @@ export function reconcileChildren(returnFiber, children) {
   // 是否需要追踪副作用，该变量是一个布尔值
   // true：代表组件更新；false：代表组件初次渲染
   let shouldTrackSideEffects = !!returnFiber.alternate;
+
+  // 架构篇-图解diff算法
+  // 第一轮遍历，会尝试复用节点
+  // 复用节点意味着你首先得有这些节点，才能说能不能复用的问题。
+  for (; oldFiber && i < newChildren.length; i++) {
+    // 第一次是不会进入到这个循环的，因为一开始压根儿没有 oldFiber。
+  }
+
+  // 从上面的 for 循环出来，有两种情况
+  // 1、oldFiber为null，说明是初次渲染。
+  // 2、i === newChildren.length 说明是更新
+  if (i === newChildren.length) {
+    // 如果还剩余有旧的 fiber 节点，那么就需要将其删除掉
+  }
+
+  // 接下来，就是我们初次渲染的情况
+  if (!oldFiber) {
+    // 说明是初次渲染
+    // 那么我们需要将 newChildren 数组中的每一个元素都生成一个 fiber 对象
+    // 然后，将这些 fiber 对象串联起来
+    for (; i < newChildren.length; i++) {
+      const newChildVNode = newChildren[i];
+
+      // 那么我们这一次就不处理，直接跳到下一次。
+      if (newChildVNode === null) continue;
+
+      // 下一步就应该根据 vnode 生产新的 fiber
+      const newFiber = createFiber(newChildVNode, returnFiber);
+
+      // 接下来，我们需要去更新 lastPlacedIndex 这个值
+      lastPlacedIndex = placeChild(newFiber, lastPlacedIndex, i, shouldTrackSideEffects);
+
+      // 接下来，非常重要 ，我们要将新生成的 fiber 加入到 fiber 链表里面去
+      if(previousNewFiber === null) {
+        // 说明你是第一个子节点
+        returnFiber.child = newFiber;
+      } else {
+        // 进入此分支，说明当前生成的 fiber 节点，并非父 fiber 的第一个节点
+        previousNewFiber.sibling = newFiber;
+      }
+
+      // 将 previousNewFiber 设置为 newFiber
+      // 从而将当前 fiber 更新为上一个 fiber
+      previousNewFiber = newFiber;
+    }
+  }
+}
+
+/**
+ * 该方法专门用于更新 lastPlacedIndex
+ * @param {*} newFiber 上面刚刚创建的新的 fiber 对象
+ * @param {*} lastPlacedIndex 上一次的 lastPlacedIndex，也就是上一次插入的最远距离，初始值是0
+ * @param {*} newIndex 当前的下标，初始值也是 0
+ * @param {*} shouldTrackSideEffects 用于判断 returnFiber 是初次渲染还是更新
+ */
+function placeChild(newFiber, lastPlacedIndex, newIndex, shouldTrackSideEffects) {
+  // 更新 fiber 对象上面的 index
+  // fiber 对象上面的 index 记录当前 fiber 节点在当前层级下的位置
+  newFiber.index = newIndex;
+
+  if (!shouldTrackSideEffects) {
+    // 进入此 if，说明当前是初次渲染
+    // 那么我们就不需要记录节点位置了
+    return lastPlacedIndex;
+  }
 }
