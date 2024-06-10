@@ -109,10 +109,28 @@ function siftDown(heap, node, i) {
 
     if (compare(left, node) < 0) {
       // 如果进入此分支，说明左节点的过期时间更紧急
+      // 接下来，还需要进行左右节点的比较，谁小谁才能上去
+      // 为什么要做 rightIndex < len 的判断呢？
+      // 因为右边的树可能存在节点缺失的情况，所以需要判断一下索引值是否超出了数组的长度，防止数组越界
+      if (rightIndex < len && compare(right, left) < 0) {
+        // 如果进入此分支，说明右边节点的过期时间更紧急
+        heap[index] = right;
+        heap[rightIndex] = node;
+        index = rightIndex;
+      } else {
+        // 如果进入此分支，说明左边节点的过期时间更紧急
+        heap[index] = left;
+        heap[leftIndex] = node;
+        index = leftIndex;
+      }
     } else if (compare(right, node) < 0 && rightIndex < len) {
       // 如果进入此分支，说明右节点的过期时间更紧急
+      heap[index] = right;
+      heap[rightIndex] = node;
+      index = rightIndex;
     } else {
       // 当前的任务就是最小的
+      return;
     }
   }
 }
