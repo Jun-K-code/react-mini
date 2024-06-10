@@ -21,7 +21,7 @@ export const updateHostComponent = (wip) => {
     reconcileChildren(wip, wip.props.children);
 
     // 上一步执行完毕后，说明已经处理完了所有的子节点 vnode，fiber 的链表也形成了
-    console.log('测试wip', wip);
+    // console.log('测试wip', wip);
   }
 };
 

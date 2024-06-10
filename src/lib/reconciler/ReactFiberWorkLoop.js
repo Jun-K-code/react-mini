@@ -1,7 +1,9 @@
 /**
  * @description 该文件负责整个React的一个执行流程
  */
-import beginWork from "./ReactFiberBeginWork";
+import beginWork from './ReactFiberBeginWork';
+import completeWork from './ReactFiberCompleteWork';
+import commitWorker from './ReactFiberCommitWork';
 
 // wip 的英语全称为 work in progress，表示正在进行的工作
 // 我们使用这个变量来保存当前正在进行的工作 fiber 对象
@@ -34,7 +36,7 @@ const workloop = (deadline) => {
 
   // 代码来这里，说明要么是没事件，这个我们不需要管
   // 还有一种情况，就是整个 fiber 树都处理完了
-  if(!wip) {
+  if (!wip) {
     // 说明整个 fiber 树都处理完了
     // 我们需要将 wipRoot 提交到 DOM 节点上
     commitRoot();
@@ -81,8 +83,14 @@ const performUnitOfWork = () => {
   wip = null;
 };
 
+/**
+ * 执行该方法的时候，说明整个节点的协调工作已经完成
+ * 接下来，就进入到渲染阶段
+ */
 const commitRoot = () => {
-    
-}
+  commitWorker(wipRoot);
+  // 渲染完成后，将wipRoot置为null
+  wipRoot = null;
+};
 
 export default scheduleUpdateOnFiber;

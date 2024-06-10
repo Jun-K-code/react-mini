@@ -11,7 +11,7 @@ export function reconcileChildren(returnFiber, children) {
   // console.log('测试children', children);
   if (isStr(children)) return;
 
-  console.log('测试非数组 children', children);
+  // console.log('测试非数组 children', children);
   // 接下来，需要做一些准备工作
   // 如果只有一个子节点，那么 children 就是一个 vnode 对象
   // 如果有多个子节点，那么 children 就是一个 vnode 数组

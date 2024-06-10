@@ -12,7 +12,7 @@ function updateContainer(element, container) {
     type: container.nodeName.toLowerCase(),
     stateNode: container,
   });
-  console.log('测试fiber', fiber);
+  // console.log('测试fiber', fiber);
   // 到目前为止，我们就创建了第一个fiber对象。
   // 但是目前仅仅只有最外层的父元素创建了对应的 fiber 对象
   scheduleUpdateOnFiber(fiber);
@@ -31,7 +31,7 @@ class ReactDOMRoot {
    * 2、新的虚拟DOM(链表结构)，我们称之为 Fiber
    */
   render(children) {
-    console.log('测试vnode', children);
+    // console.log('测试vnode', children);
     updateContainer(children, this._internalRoot);
   }
 }
