@@ -4,6 +4,7 @@
 import beginWork from './ReactFiberBeginWork';
 import completeWork from './ReactFiberCompleteWork';
 import commitWorker from './ReactFiberCommitWork';
+import scheduleCallback from '../scheduler/Scheduler';
 
 // wip 的英语全称为 work in progress，表示正在进行的工作
 // 我们使用这个变量来保存当前正在进行的工作 fiber 对象
@@ -20,23 +21,44 @@ const scheduleUpdateOnFiber = (fiber) => {
   // 目前我们先使用 requestIdleCallback 来进行调用
   // 后期使用 scheduler 包来进行调用
   // 当浏览器的每一帧有空闲时间的时候，就会执行 workloop 函数
-  requestIdleCallback(workloop);
+  // requestIdleCallback(workloop);
+  scheduleCallback(workloop);
 };
 
 /**
  * 该函数会在每一帧有剩余时间的时候执行
  */
-const workloop = (deadline) => {
+// const workloop = (deadline) => {
+//   // 有wip，并且有剩余的时间
+//   while (wip && deadline.timeRemaining() > 0) {
+//     // 进入此循环，说明有需要进行处理的 fiber 节点
+//     // 并且目前也有时间来处理
+//     performUnitOfWork(); // 该方法负责单独处理一个 fiber 节点
+//   }
+
+//   // 代码来这里，说明要么是没事件，这个我们不需要管
+//   // 还有一种情况，就是整个 fiber 树都处理完了
+//   if (!wip) {
+//     // 说明整个 fiber 树都处理完了
+//     // 我们需要将 wipRoot 提交到 DOM 节点上
+//     commitRoot();
+//   }
+// };
+
+/**
+ * 该函数会在每一帧有剩余时间的时候执行
+ * @param {*} time 接收一个时间参数，如果超过了该时间，那么就不再处理下一个 fiber
+ */
+const workloop = (time) => {
   // 有wip，并且有剩余的时间
-  while (wip && deadline.timeRemaining() > 0) {
-    // 进入此循环，说明有需要进行处理的 fiber 节点
-    // 并且目前也有时间来处理
+  while (wip) {
+    if (time < 0) return false;
     performUnitOfWork(); // 该方法负责单独处理一个 fiber 节点
   }
 
   // 代码来这里，说明要么是没事件，这个我们不需要管
   // 还有一种情况，就是整个 fiber 树都处理完了
-  if (!wip) {
+  if (!wip && wipRoot) {
     // 说明整个 fiber 树都处理完了
     // 我们需要将 wipRoot 提交到 DOM 节点上
     commitRoot();

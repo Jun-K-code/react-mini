@@ -115,3 +115,12 @@ export function updateNode(node, prevVal, nextVal) {
     }
   });
 }
+
+/**
+ *
+ * @returns 返回当前时间
+ * 关于 performance API 的说明，可以参阅 MDN
+ */
+export function getCurrentTime() {
+  return performance.now();
+}
