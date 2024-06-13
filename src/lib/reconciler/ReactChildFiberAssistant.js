@@ -57,3 +57,54 @@ export function placeChild(newFiber, lastPlacedIndex, newIndex, shouldTrackSideE
     return lastPlacedIndex;
   }
 }
+
+/**
+ *
+ * @param {*} returnFiber 父 fiber
+ * @param {*} childToDelete 需要删除的子 fiber
+ */
+export function deleteChild(returnFiber, childToDelete) {
+  // 这里的删除其实仅仅只是标记一下，真正的删除是在 commit 阶段
+  // 将要删除的 fiber 对象放入到一个数组里面
+  const deletions = returnFiber.deletions; // deletions 是一个数组
+
+  if (deletions) {
+    returnFiber.deletions.push(childToDelete);
+  } else {
+    // 第一次是没有这个数组的，那么我们就初始化一个数组
+    // 并且将本次要删除的子 fiber 放入进去
+    returnFiber.deletions = [childToDelete];
+  }
+}
+/**
+ * 这里涉及到要删除多个节点，删除多个节点的核心思想也就是一个一个去删除。
+ * @param {*} returnFiber 父 fiber
+ * @param {*} crurentFirstChild 旧的第一个待删除的子 fiber
+ */
+export function deleteReaminChildren(returnFiber, crurentFirstChild) {
+  let childToDelete = crurentFirstChild;
+
+  while (childToDelete) {
+    deleteChild(returnFiber, hildToDelete);
+    childToDelete = childToDelete.sibling;
+  }
+}
+
+/**
+ * 将旧的子节点构建到一个 map 结构里面
+ * @param {*} crurentFirstChild
+ */
+export function mapRemainingChildren(crurentFirstChild) {
+  // 首先，第一步肯定是创建一个 map
+  const existingChildren = new Map();
+  let existingChild = crurentFirstChild;
+
+  while (existingChild) {
+    existingChildren.set(existingChild.key || existingChild.index, existingChild);
+
+    // 切换到下一个兄弟节点
+    existingChild = existingChild.sibling;
+  }
+
+  return existingChildren;
+}
